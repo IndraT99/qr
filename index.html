@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        #reader {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>QR Scanner</h1>
+    <p>Scan a QR code using your camera:</p>
+    <div id="reader"></div>
+    <div id="result">Hasil pemindaian akan ditampilkan di sini.</div>
+
+    <!-- Mengimpor pustaka html5-qrcode -->
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script>
+        // Fungsi untuk menangani hasil pemindaian QR
+        function onScanSuccess(decodedText, decodedResult) {
+            // Menampilkan hasil pemindaian
+            document.getElementById('result').textContent = "Hasil: " + decodedText;
+        }
+
+        // Memulai pemindaian QR Code dengan menggunakan kamera pengguna
+        function startScanner() {
+            const html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start(
+                { facingMode: "environment" }, // Menggunakan kamera belakang
+                {
+                    fps: 10, // Frame rate untuk pemindaian
+                    qrbox: 250 // Ukuran area pemindaian
+                },
+                onScanSuccess // Callback saat QR terdeteksi
+            ).catch(err => {
+                console.error("QR scanner error: ", err);
+            });
+        }
+
+        // Memulai pemindaian QR saat halaman dimuat
+        window.onload = function() {
+            startScanner();
+        };
+    </script>
+</body>
+</html>
